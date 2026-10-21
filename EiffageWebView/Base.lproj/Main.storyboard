@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="BYZ-38-t0r" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="nav-bar-001">
+                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="web-vc-001" kind="relationship" relationship="rootViewController" id="h0V-2s-woI"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nav-first-resp" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="130.53435114503816" y="-27.464788732394368"/>
+        </scene>
+        <!--Web View Controller-->
+        <scene sceneID="web-scene-001">
+            <objects>
+                <viewController id="web-vc-001" customClass="WebViewController" customModule="EiffageWebView" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="web-view-001">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="progress-view-001">
+                                <rect key="frame" x="0.0" y="103" width="393" height="4"/>
+                            </progressView>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wk-web-view-001">
+                                <rect key="frame" x="0.0" y="107" width="393" height="711"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="safe-area-001"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="progress-view-001" firstAttribute="leading" secondItem="safe-area-001" secondAttribute="leading" id="progress-leading"/>
+                            <constraint firstItem="wk-web-view-001" firstAttribute="leading" secondItem="safe-area-001" secondAttribute="leading" id="webview-leading"/>
+                            <constraint firstItem="progress-view-001" firstAttribute="top" secondItem="safe-area-001" secondAttribute="top" id="progress-top"/>
+                            <constraint firstItem="wk-web-view-001" firstAttribute="top" secondItem="progress-view-001" secondAttribute="bottom" id="webview-top"/>
+                            <constraint firstItem="safe-area-001" firstAttribute="trailing" secondItem="progress-view-001" secondAttribute="trailing" id="progress-trailing"/>
+                            <constraint firstItem="safe-area-001" firstAttribute="trailing" secondItem="wk-web-view-001" secondAttribute="trailing" id="webview-trailing"/>
+                            <constraint firstItem="safe-area-001" firstAttribute="bottom" secondItem="wk-web-view-001" secondAttribute="bottom" id="webview-bottom"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="nav-item-001"/>
+                    <connections>
+                        <outlet property="progressView" destination="progress-view-001" id="progress-outlet"/>
+                        <outlet property="webView" destination="wk-web-view-001" id="webview-outlet"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="web-first-resp" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1047.3282442748092" y="-27.464788732394368"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
