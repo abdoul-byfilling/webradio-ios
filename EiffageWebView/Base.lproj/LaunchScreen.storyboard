@@ -7,7 +7,8 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Écran de lancement : logo seul (contrat §4)-->
+        <!--Écran de démarrage (contrat §4) : première image de l'animation-->
+        <!--L'app recharge ce storyboard et anime l'égaliseur (barres tag 1 à 5)-->
         <scene sceneID="EHf-IW-A2E">
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
@@ -15,19 +16,118 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="launch-logo">
-                                <rect key="frame" x="128.5" y="358" width="136" height="136"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="group-view">
+                                <rect key="frame" x="32" y="245" width="329" height="319"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="launch-logo">
+                                        <rect key="frame" x="96.5" y="0.0" width="136" height="136"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="136" id="launch-logo-width"/>
+                                            <constraint firstAttribute="height" constant="136" id="launch-logo-height"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Radio Autoroute&#10;de l'Avenir" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="title-label">
+                                        <rect key="frame" x="0.0" y="166" width="329" height="62"/>
+                                        <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="26"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="La voix de l'Autoroute de l'Avenir" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="slogan-label">
+                                        <rect key="frame" x="0.0" y="236" width="329" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" red="0.66274509803921566" green="0.76470588235294112" blue="0.85490196078431369" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eq-view">
+                                        <rect key="frame" x="142" y="290" width="45" height="30"/>
+                                        <subviews>
+                                            <view tag="1" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eq-bar-1">
+                                                <rect key="frame" x="0" y="21" width="5" height="9"/>
+                                                <color key="backgroundColor" red="0.23529411764705882" green="0.75294117647058822" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="5" id="eq-bar-1-w"/>
+                                                    <constraint firstAttribute="height" constant="9" id="eq-bar-1-h"/>
+                                                </constraints>
+                                            </view>
+                                            <view tag="2" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eq-bar-2">
+                                                <rect key="frame" x="10" y="0.3999999999999986" width="5" height="29.6"/>
+                                                <color key="backgroundColor" red="0.23529411764705882" green="0.75294117647058822" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="5" id="eq-bar-2-w"/>
+                                                    <constraint firstAttribute="height" constant="29.6" id="eq-bar-2-h"/>
+                                                </constraints>
+                                            </view>
+                                            <view tag="3" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eq-bar-3">
+                                                <rect key="frame" x="20" y="14" width="5" height="16"/>
+                                                <color key="backgroundColor" red="0.23529411764705882" green="0.75294117647058822" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="5" id="eq-bar-3-w"/>
+                                                    <constraint firstAttribute="height" constant="16" id="eq-bar-3-h"/>
+                                                </constraints>
+                                            </view>
+                                            <view tag="4" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eq-bar-4">
+                                                <rect key="frame" x="30" y="7" width="5" height="23"/>
+                                                <color key="backgroundColor" red="0.23529411764705882" green="0.75294117647058822" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="5" id="eq-bar-4-w"/>
+                                                    <constraint firstAttribute="height" constant="23" id="eq-bar-4-h"/>
+                                                </constraints>
+                                            </view>
+                                            <view tag="5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eq-bar-5">
+                                                <rect key="frame" x="40" y="19.3" width="5" height="10.7"/>
+                                                <color key="backgroundColor" red="0.23529411764705882" green="0.75294117647058822" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="5" id="eq-bar-5-w"/>
+                                                    <constraint firstAttribute="height" constant="10.7" id="eq-bar-5-h"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="45" id="eq-width"/>
+                                            <constraint firstAttribute="height" constant="30" id="eq-height"/>
+                                            <constraint firstItem="eq-bar-1" firstAttribute="leading" secondItem="eq-view" secondAttribute="leading" constant="0" id="eq-bar-1-x"/>
+                                            <constraint firstItem="eq-bar-1" firstAttribute="bottom" secondItem="eq-view" secondAttribute="bottom" id="eq-bar-1-b"/>
+                                            <constraint firstItem="eq-bar-2" firstAttribute="leading" secondItem="eq-view" secondAttribute="leading" constant="10" id="eq-bar-2-x"/>
+                                            <constraint firstItem="eq-bar-2" firstAttribute="bottom" secondItem="eq-view" secondAttribute="bottom" id="eq-bar-2-b"/>
+                                            <constraint firstItem="eq-bar-3" firstAttribute="leading" secondItem="eq-view" secondAttribute="leading" constant="20" id="eq-bar-3-x"/>
+                                            <constraint firstItem="eq-bar-3" firstAttribute="bottom" secondItem="eq-view" secondAttribute="bottom" id="eq-bar-3-b"/>
+                                            <constraint firstItem="eq-bar-4" firstAttribute="leading" secondItem="eq-view" secondAttribute="leading" constant="30" id="eq-bar-4-x"/>
+                                            <constraint firstItem="eq-bar-4" firstAttribute="bottom" secondItem="eq-view" secondAttribute="bottom" id="eq-bar-4-b"/>
+                                            <constraint firstItem="eq-bar-5" firstAttribute="leading" secondItem="eq-view" secondAttribute="leading" constant="40" id="eq-bar-5-x"/>
+                                            <constraint firstItem="eq-bar-5" firstAttribute="bottom" secondItem="eq-view" secondAttribute="bottom" id="eq-bar-5-b"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="136" id="launch-logo-width"/>
-                                    <constraint firstAttribute="height" constant="136" id="launch-logo-height"/>
+                                    <constraint firstItem="launch-logo" firstAttribute="top" secondItem="group-view" secondAttribute="top" id="logo-top"/>
+                                    <constraint firstItem="launch-logo" firstAttribute="centerX" secondItem="group-view" secondAttribute="centerX" id="logo-center-x"/>
+                                    <constraint firstItem="title-label" firstAttribute="top" secondItem="launch-logo" secondAttribute="bottom" constant="30" id="title-top"/>
+                                    <constraint firstItem="title-label" firstAttribute="leading" secondItem="group-view" secondAttribute="leading" id="title-leading"/>
+                                    <constraint firstItem="title-label" firstAttribute="trailing" secondItem="group-view" secondAttribute="trailing" id="title-trailing"/>
+                                    <constraint firstItem="slogan-label" firstAttribute="top" secondItem="title-label" secondAttribute="bottom" constant="8" id="slogan-top"/>
+                                    <constraint firstItem="slogan-label" firstAttribute="leading" secondItem="group-view" secondAttribute="leading" id="slogan-leading"/>
+                                    <constraint firstItem="slogan-label" firstAttribute="trailing" secondItem="group-view" secondAttribute="trailing" id="slogan-trailing"/>
+                                    <constraint firstItem="eq-view" firstAttribute="top" secondItem="slogan-label" secondAttribute="bottom" constant="36" id="eq-top"/>
+                                    <constraint firstItem="eq-view" firstAttribute="centerX" secondItem="group-view" secondAttribute="centerX" id="eq-center-x"/>
+                                    <constraint firstItem="eq-view" firstAttribute="bottom" secondItem="group-view" secondAttribute="bottom" id="eq-bottom"/>
                                 </constraints>
-                            </imageView>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Infos trafic · Podcasts · Dédicaces" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="features-label">
+                                <rect key="frame" x="32" y="763" width="329" height="15"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
+                                <color key="textColor" red="0.66274509803921566" green="0.76470588235294112" blue="0.85490196078431369" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="launch-safe-area"/>
                         <color key="backgroundColor" red="0.043137254901960784" green="0.14509803921568629" blue="0.27058823529411763" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="launch-logo" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="launch-logo-center-x"/>
-                            <constraint firstItem="launch-logo" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="launch-logo-center-y"/>
+                            <constraint firstItem="group-view" firstAttribute="leading" secondItem="launch-safe-area" secondAttribute="leading" constant="32" id="group-leading"/>
+                            <constraint firstItem="launch-safe-area" firstAttribute="trailing" secondItem="group-view" secondAttribute="trailing" constant="32" id="group-trailing"/>
+                            <constraint firstItem="group-view" firstAttribute="centerY" secondItem="launch-safe-area" secondAttribute="centerY" constant="-20" id="group-center-y"/>
+                            <constraint firstItem="features-label" firstAttribute="leading" secondItem="launch-safe-area" secondAttribute="leading" constant="32" id="features-leading"/>
+                            <constraint firstItem="launch-safe-area" firstAttribute="trailing" secondItem="features-label" secondAttribute="trailing" constant="32" id="features-trailing"/>
+                            <constraint firstItem="launch-safe-area" firstAttribute="bottom" secondItem="features-label" secondAttribute="bottom" constant="40" id="features-bottom"/>
                         </constraints>
                     </view>
                 </viewController>

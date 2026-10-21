@@ -128,29 +128,72 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     }
 
     // MARK: - Launch Screen
-    // L'écran de lancement reste affiché jusqu'au premier chargement du
-    // site, au lieu d'un écran blanc (contrat §4)
-    private var launchCover: UIView?
+    // L'écran de lancement prend vie : même storyboard, égaliseur animé,
+    // jusqu'au premier chargement du site, sans durée minimale (contrat §4)
+    private var launchCoverController: UIViewController?
+    private var launchCover: UIView? { return launchCoverController?.view }
+    
+    // Décalage de chaque barre dans son cycle d'une seconde, comme la maquette
+    // « Démarrage » ; les hauteurs du storyboard sont celles de l'instant 0
+    private let equalizerPhases: [CFTimeInterval] = [0, 0.45, 0.2, 0.7, 0.1]
 
     private func showLaunchCover() {
-        guard let cover = UIStoryboard(name: "LaunchScreen", bundle: nil).instantiateInitialViewController()?.view else { return }
+        // Contrôleur enfant : la vue garde la même zone sûre que l'écran système
+        guard let coverController = UIStoryboard(name: "LaunchScreen", bundle: nil).instantiateInitialViewController() else { return }
+        addChild(coverController)
+        let cover = coverController.view!
         cover.frame = view.bounds
         cover.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(cover)
-        launchCover = cover
+        coverController.didMove(toParent: self)
+        launchCoverController = coverController
         if let color = cover.backgroundColor {
             setStatusBarColor(color)
+        }
+        cover.layoutIfNeeded()
+        animateEqualizer(in: cover)
+    }
+    
+    // Les barres du storyboard (tags 1 à 5) sont remplacées par des calques
+    // animés partant de la même hauteur, donc sans saut ; immobiles si
+    // « Réduire les animations » est activé
+    private func animateEqualizer(in cover: UIView) {
+        guard !UIAccessibility.isReduceMotionEnabled else { return }
+        
+        for (index, phase) in equalizerPhases.enumerated() {
+            guard let bar = cover.viewWithTag(index + 1), let container = bar.superview else { continue }
+            let fullHeight = container.bounds.height
+            
+            let barLayer = CALayer()
+            barLayer.backgroundColor = bar.backgroundColor?.cgColor
+            barLayer.anchorPoint = CGPoint(x: 0.5, y: 1)
+            barLayer.bounds = CGRect(x: 0, y: 0, width: bar.bounds.width, height: fullHeight)
+            barLayer.position = CGPoint(x: bar.frame.midX, y: fullHeight)
+            barLayer.transform = CATransform3DMakeScale(1, bar.bounds.height / fullHeight, 1)
+            container.layer.addSublayer(barLayer)
+            bar.isHidden = true
+            
+            let animation = CAKeyframeAnimation(keyPath: "transform.scale.y")
+            animation.values = [0.3, 1, 0.3]
+            animation.keyTimes = [0, 0.5, 1]
+            animation.timingFunctions = [CAMediaTimingFunction(name: .easeInEaseOut), CAMediaTimingFunction(name: .easeInEaseOut)]
+            animation.duration = 1
+            animation.repeatCount = .infinity
+            animation.timeOffset = phase
+            barLayer.add(animation, forKey: "egaliseur")
         }
     }
 
     private func hideLaunchCover() {
-        guard let cover = launchCover else { return }
-        launchCover = nil
+        guard let coverController = launchCoverController else { return }
+        launchCoverController = nil
         setNeedsStatusBarAppearanceUpdate()
+        coverController.willMove(toParent: nil)
         UIView.animate(withDuration: 0.25, animations: {
-            cover.alpha = 0
+            coverController.view.alpha = 0
         }) { _ in
-            cover.removeFromSuperview()
+            coverController.view.removeFromSuperview()
+            coverController.removeFromParent()
         }
     }
 
