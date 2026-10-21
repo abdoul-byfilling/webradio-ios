@@ -64,10 +64,12 @@ utilisait `LaunchViewController`, interdit pour un écran de lancement).
 
 Reste avant de pouvoir annoncer la version 1 du contrat :
 
-- **Écran de lancement (§4)** : il affiche un cadre vide et « Eiffage
-  Concessions / Sénégal » ; le contrat demande le logo seul, à redessiner
-  ensemble (maquette « Démarrage »). Il disparaît aussi avant que la
-  première page soit chargée (écran blanc pendant le chargement).
+- **Écran de lancement (§4)** : fait le 2026-10-21 d'après la maquette
+  « Démarrage » (fond `#0B2545`, logo dans un carré blanc arrondi), mais
+  logo seul comme le demande le contrat : ni nom, ni slogan, ni animation
+  d'égaliseur. Il reste affiché jusqu'au premier chargement du site. À
+  valider ensemble ; si le texte de la maquette est voulu, modifier
+  d'abord le contrat.
 - **Recette du §9 sur un iPhone**, en particulier : radio écran verrouillé
   et commandes de l'écran verrouillé (Media Session du site), demande du
   micro et envoi d'une dédicace, `tel:` / `mailto:` / WhatsApp, geste

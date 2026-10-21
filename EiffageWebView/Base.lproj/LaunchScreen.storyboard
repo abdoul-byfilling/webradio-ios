@@ -4,11 +4,10 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Launch View Controller-->
+        <!--Écran de lancement : logo seul (contrat §4)-->
         <scene sceneID="EHf-IW-A2E">
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
@@ -16,80 +15,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <!-- Gradient Background View -->
-                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gradient-bg-view">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </view>
-                            
-                            <!-- Main Container -->
-                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="main-container-view">
-                                <rect key="frame" x="96.5" y="326" width="200" height="200"/>
-                                <subviews>
-                                    <!-- Logo Container with Shadow -->
-                                    <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="logo-shadow-container">
-                                        <rect key="frame" x="50" y="50" width="100" height="100"/>
-                                        <subviews>
-                                            <!-- App Icon ImageView -->
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="app-icon-image-view">
-                                                <rect key="frame" x="10" y="10" width="80" height="80"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="80" id="app-icon-width-constraint"/>
-                                                    <constraint firstAttribute="height" constant="80" id="app-icon-height-constraint"/>
-                                                </constraints>
-                                            </imageView>
-                                        </subviews>
-                                        <color key="backgroundColor" white="1" alpha="0.95" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstItem="app-icon-image-view" firstAttribute="centerX" secondItem="logo-shadow-container" secondAttribute="centerX" id="app-icon-center-x"/>
-                                            <constraint firstItem="app-icon-image-view" firstAttribute="centerY" secondItem="logo-shadow-container" secondAttribute="centerY" id="app-icon-center-y"/>
-                                            <constraint firstAttribute="width" constant="100" id="shadow-container-width"/>
-                                            <constraint firstAttribute="height" constant="100" id="shadow-container-height"/>
-                                        </constraints>
-                                    </view>
-                                    
-                                    <!-- Company Name Label -->
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Eiffage Concessions" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="company-name-label">
-                                        <rect key="frame" x="0.0" y="165" width="200" height="25"/>
-                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="18"/>
-                                        <color key="textColor" red="0.2" green="0.2" blue="0.3" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    
-                                    <!-- Subtitle Label -->
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sénégal" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="subtitle-label">
-                                        <rect key="frame" x="0.0" y="175" width="200" height="20"/>
-                                        <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="14"/>
-                                        <color key="textColor" red="0.4" green="0.4" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="launch-logo">
+                                <rect key="frame" x="128.5" y="358" width="136" height="136"/>
                                 <constraints>
-                                    <constraint firstItem="logo-shadow-container" firstAttribute="centerX" secondItem="main-container-view" secondAttribute="centerX" id="logo-container-center-x"/>
-                                    <constraint firstItem="logo-shadow-container" firstAttribute="top" secondItem="main-container-view" secondAttribute="top" constant="50" id="logo-container-top"/>
-                                    <constraint firstItem="company-name-label" firstAttribute="top" secondItem="logo-shadow-container" secondAttribute="bottom" constant="15" id="company-label-top"/>
-                                    <constraint firstItem="company-name-label" firstAttribute="leading" secondItem="main-container-view" secondAttribute="leading" id="company-label-leading"/>
-                                    <constraint firstItem="company-name-label" firstAttribute="trailing" secondItem="main-container-view" secondAttribute="trailing" id="company-label-trailing"/>
-                                    <constraint firstItem="subtitle-label" firstAttribute="top" secondItem="company-name-label" secondAttribute="bottom" constant="5" id="subtitle-top"/>
-                                    <constraint firstItem="subtitle-label" firstAttribute="leading" secondItem="main-container-view" secondAttribute="leading" id="subtitle-leading"/>
-                                    <constraint firstItem="subtitle-label" firstAttribute="trailing" secondItem="main-container-view" secondAttribute="trailing" id="subtitle-trailing"/>
-                                    <constraint firstAttribute="width" constant="200" id="main-container-width"/>
-                                    <constraint firstAttribute="height" constant="200" id="main-container-height"/>
+                                    <constraint firstAttribute="width" constant="136" id="launch-logo-width"/>
+                                    <constraint firstAttribute="height" constant="136" id="launch-logo-height"/>
                                 </constraints>
-                            </view>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="launch-safe-area"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" red="0.043137254901960784" green="0.14509803921568629" blue="0.27058823529411763" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <!-- Gradient Background Constraints -->
-                            <constraint firstItem="gradient-bg-view" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="gradient-top"/>
-                            <constraint firstItem="gradient-bg-view" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="gradient-leading"/>
-                            <constraint firstItem="gradient-bg-view" firstAttribute="trailing" secondItem="Ze5-6b-2t3" secondAttribute="trailing" id="gradient-trailing"/>
-                            <constraint firstItem="gradient-bg-view" firstAttribute="bottom" secondItem="Ze5-6b-2t3" secondAttribute="bottom" id="gradient-bottom"/>
-                            
-                            <!-- Main Container Constraints -->
-                            <constraint firstItem="main-container-view" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="main-container-center-x"/>
-                            <constraint firstItem="main-container-view" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="main-container-center-y"/>
+                            <constraint firstItem="launch-logo" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="launch-logo-center-x"/>
+                            <constraint firstItem="launch-logo" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="launch-logo-center-y"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -99,8 +37,6 @@
         </scene>
     </scenes>
     <resources>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
+        <image name="LaunchLogo" width="136" height="136"/>
     </resources>
 </document>

@@ -19,6 +19,7 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         super.viewDidLoad()
         setupWebView()
         setupUI()
+        showLaunchCover()
         setupConnectivityMonitoring()
         loadWebsite()
     }
@@ -96,6 +97,34 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         webView.load(request)
     }
     
+    // MARK: - Launch Screen
+    // L'écran de lancement reste affiché jusqu'au premier chargement du
+    // site, au lieu d'un écran blanc (contrat §4)
+    private var launchCover: UIView?
+
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return launchCover != nil ? .lightContent : .default
+    }
+
+    private func showLaunchCover() {
+        guard let cover = UIStoryboard(name: "LaunchScreen", bundle: nil).instantiateInitialViewController()?.view else { return }
+        cover.frame = view.bounds
+        cover.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addSubview(cover)
+        launchCover = cover
+    }
+
+    private func hideLaunchCover() {
+        guard let cover = launchCover else { return }
+        launchCover = nil
+        setNeedsStatusBarAppearanceUpdate()
+        UIView.animate(withDuration: 0.25, animations: {
+            cover.alpha = 0
+        }) { _ in
+            cover.removeFromSuperview()
+        }
+    }
+
     // MARK: - Progress Management
     private func updateProgress() {
         let progress = Float(webView.estimatedProgress)
@@ -185,6 +214,7 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         updateProgress()
+        hideLaunchCover()
     }
 
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
