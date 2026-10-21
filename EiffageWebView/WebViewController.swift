@@ -5,7 +5,7 @@ import Network
 class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     
     // MARK: - Properties
-    @IBOutlet weak var webView: WKWebView!
+    private var webView: WKWebView!
     @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet weak var toolbarBottomConstraint: NSLayoutConstraint!
     
@@ -17,8 +17,8 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
         setupWebView()
+        setupUI()
         setupConnectivityMonitoring()
         loadWebsite()
     }
@@ -57,14 +57,27 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     }
     
     private func setupWebView() {
-        // WebView configuration
+        // Réglages de la webview (contrat §3)
         let configuration = WKWebViewConfiguration()
         configuration.allowsInlineMediaPlayback = true
-        configuration.mediaTypesRequiringUserActionForPlayback = []
-        
-        // User agent (optional - helps with mobile compatibility)
-        webView.customUserAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1"
-        
+        configuration.websiteDataStore = .default()
+
+        // Marqueur ajouté au User-Agent de Safari, sans le remplacer (contrat §2)
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+        let defaultName = configuration.applicationNameForUserAgent ?? ""
+        configuration.applicationNameForUserAgent = "\(defaultName) WebRadioAvenirApp/\(version)"
+            .trimmingCharacters(in: .whitespaces)
+
+        webView = WKWebView(frame: .zero, configuration: configuration)
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(webView)
+        NSLayoutConstraint.activate([
+            webView.topAnchor.constraint(equalTo: progressView.bottomAnchor),
+            webView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            webView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            webView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+
         webView.navigationDelegate = self
         webView.uiDelegate = self
         webView.allowsBackForwardNavigationGestures = true

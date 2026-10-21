@@ -37,31 +37,18 @@
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="progress-view-001">
                                 <rect key="frame" x="0.0" y="103" width="393" height="4"/>
                             </progressView>
-                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wk-web-view-001">
-                                <rect key="frame" x="0.0" y="107" width="393" height="711"/>
-                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <wkWebViewConfiguration key="configuration">
-                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
-                                    <wkPreferences key="preferences"/>
-                                </wkWebViewConfiguration>
-                            </wkWebView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="safe-area-001"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="progress-view-001" firstAttribute="leading" secondItem="safe-area-001" secondAttribute="leading" id="progress-leading"/>
-                            <constraint firstItem="wk-web-view-001" firstAttribute="leading" secondItem="safe-area-001" secondAttribute="leading" id="webview-leading"/>
                             <constraint firstItem="progress-view-001" firstAttribute="top" secondItem="safe-area-001" secondAttribute="top" id="progress-top"/>
-                            <constraint firstItem="wk-web-view-001" firstAttribute="top" secondItem="progress-view-001" secondAttribute="bottom" id="webview-top"/>
                             <constraint firstItem="safe-area-001" firstAttribute="trailing" secondItem="progress-view-001" secondAttribute="trailing" id="progress-trailing"/>
-                            <constraint firstItem="safe-area-001" firstAttribute="trailing" secondItem="wk-web-view-001" secondAttribute="trailing" id="webview-trailing"/>
-                            <constraint firstItem="safe-area-001" firstAttribute="bottom" secondItem="wk-web-view-001" secondAttribute="bottom" id="webview-bottom"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="nav-item-001"/>
                     <connections>
                         <outlet property="progressView" destination="progress-view-001" id="progress-outlet"/>
-                        <outlet property="webView" destination="wk-web-view-001" id="webview-outlet"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="web-first-resp" sceneMemberID="firstResponder"/>
