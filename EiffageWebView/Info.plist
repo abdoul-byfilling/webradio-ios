@@ -23,7 +23,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Cette application a besoin d&apos;accéder au microphone pour permettre l&apos;interaction vocale avec le contenu web et les fonctionnalités audio.</string>
+	<string>Le micro sert à enregistrer votre dédicace vocale.</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>

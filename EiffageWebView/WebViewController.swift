@@ -262,6 +262,13 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         return nil
     }
     
+    // Micro des dédicaces vocales : accordé seulement au site et seulement
+    // pour le micro (contrat §5). iOS demande ensuite l'autorisation système.
+    func webView(_ webView: WKWebView, requestMediaCapturePermissionFor origin: WKSecurityOrigin, initiatedByFrame frame: WKFrameInfo, type: WKMediaCaptureType, decisionHandler: @escaping (WKPermissionDecision) -> Void) {
+        let isSite = origin.protocol == "https" && origin.host == "www.eiffageconcessionssenegal.sn" && origin.port == 0
+        decisionHandler(isSite && type == .microphone ? .grant : .deny)
+    }
+
     func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
