@@ -26,8 +26,7 @@ Différences connues avec la 2.0, non reproduites faute de source :
 
 - la 2.0 avait un écran de démarrage animé (`SplashViewController`) ; ici,
   seul l'écran de lancement statique (`LaunchScreen.storyboard`) s'affiche,
-  ce que demande justement le contrat (§4). `LaunchViewController.swift`
-  n'est utilisé nulle part (code mort) ;
+  ce que demande justement le contrat (§4) ;
 - la 2.0 demandait elle-même l'autorisation du micro (messages « Permission
   microphone accordée / refusée ») ;
 - la 2.0 autorisait la page à lire les fichiers locaux
@@ -40,30 +39,37 @@ Sur le Mac : ouvrir `EiffageWebView.xcodeproj` dans Xcode, choisir l'équipe
 SENAC SA si Xcode la demande, lancer sur un iPhone. Pour publier :
 Product → Archive, puis Distribute App → App Store Connect.
 
-## Écarts avec le contrat (relevés le 2026-10-21)
+## Écarts avec le contrat
 
-1. **User-Agent** : `customUserAgent` remplace tout par un faux Safari iOS 15,
-   sans marqueur. Contrat §2 : garder le User-Agent du système et ajouter
-   `WebRadioAvenirApp/<version>` (`configuration.applicationNameForUserAgent`).
-2. **Configuration de la webview** : `setupWebView()` crée une
-   `WKWebViewConfiguration` qui n'est jamais utilisée (la webview vient du
-   storyboard) : créer la webview en code avec sa configuration (lecture en
-   ligne, User-Agent, données du site persistantes).
-3. **Micro** : aucune réponse à `requestMediaCapturePermissionFor` (iOS 15+) :
-   accorder le micro seulement pour `https://www.eiffageconcessionssenegal.sn`.
-   Texte de la demande à simplifier (contrat §5 : « Le micro sert à
-   enregistrer votre dédicace vocale. »).
-4. **Liens** : tout le domaine reste dans l'app, y compris le site WordPress
-   d'Eiffage ; les redirections hors domaine qui ne sont pas des clics
-   restent aussi dans l'app. Contrat §1 : seulement `/app3/` dans l'app.
-5. **Interface native en trop** : barre de navigation « Eiffage Concessions »
-   (titre, retour, actualiser, réglages) au-dessus du site, qui a déjà sa
-   propre navigation ; écran Réglages (vider le cache / les cookies) inutile.
-6. **`NSAllowsArbitraryLoads`** : autorise les connexions non chiffrées sans
-   raison (le site est en https) ; à retirer.
-7. **Orientation** : paysage autorisé sur iPhone ; le site est conçu en
-   portrait.
-8. **Écran hors connexion** : présent (bien) ; vérifier qu'il recharge le site.
+Relevés le 2026-10-21 et corrigés le même jour (vérifiés sur simulateur
+iOS 18.5) :
 
-À vérifier sur un iPhone : radio écran verrouillé (contrat §6), commandes de
-l'écran verrouillé (Media Session du site).
+1. User-Agent : celui du système + `WebRadioAvenirApp/<version>` ; le site
+   renvoie `data-in-app="1"` (§2).
+2. Webview créée en code avec sa configuration : lecture en ligne, données
+   du site persistantes (§3).
+3. Micro accordé seulement au site ; texte « Le micro sert à enregistrer
+   votre dédicace vocale. » (§5).
+4. Liens : seul `/app3/` reste dans l'app, tout le reste s'ouvre à
+   l'extérieur, clic, redirection ou `target="_blank"` (§1). Adresse
+   chargée : `app3/index.php` sans paramètre.
+5. Barre de navigation native et écran Réglages supprimés.
+6. `NSAllowsArbitraryLoads` retiré (tout est en https, flux radio compris).
+7. Portrait seul sur iPhone (l'iPad garde toutes les orientations).
+8. Écran hors connexion : affiché seulement si le site ne se charge pas ;
+   « Réessayer » et le retour du réseau rechargent le site.
+
+Aussi corrigé : le projet ne compilait pas (`LaunchScreen.storyboard`
+utilisait `LaunchViewController`, interdit pour un écran de lancement).
+
+Reste avant de pouvoir annoncer la version 1 du contrat :
+
+- **Écran de lancement (§4)** : il affiche un cadre vide et « Eiffage
+  Concessions / Sénégal » ; le contrat demande le logo seul, à redessiner
+  ensemble (maquette « Démarrage »). Il disparaît aussi avant que la
+  première page soit chargée (écran blanc pendant le chargement).
+- **Recette du §9 sur un iPhone**, en particulier : radio écran verrouillé
+  et commandes de l'écran verrouillé (Media Session du site), demande du
+  micro et envoi d'une dédicace, `tel:` / `mailto:` / WhatsApp, geste
+  retour, mode avion. Sur simulateur, la radio continue app en
+  arrière-plan.
