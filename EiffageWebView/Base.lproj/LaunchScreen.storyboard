@@ -8,7 +8,7 @@
     </dependencies>
     <scenes>
         <!--Écran de démarrage (contrat §4) : première image de l'animation-->
-        <!--L'app recharge ce storyboard et anime l'égaliseur (barres tag 1 à 5)-->
+        <!--Textes (tags 10 à 12) transparents : l'app les fait apparaître en fondu et anime l'égaliseur (barres, tags 1 à 5)-->
         <scene sceneID="EHf-IW-A2E">
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
@@ -26,13 +26,13 @@
                                             <constraint firstAttribute="height" constant="136" id="launch-logo-height"/>
                                         </constraints>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Radio Autoroute&#10;de l'Avenir" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="title-label">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Radio Autoroute&#10;de l'Avenir" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" tag="10" alpha="0.0" id="title-label">
                                         <rect key="frame" x="0.0" y="166" width="329" height="62"/>
                                         <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="26"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="La voix de l'Autoroute de l'Avenir" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="slogan-label">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="La voix de l'Autoroute de l'Avenir" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" tag="11" alpha="0.0" id="slogan-label">
                                         <rect key="frame" x="0.0" y="236" width="329" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" red="0.66274509803921566" green="0.76470588235294112" blue="0.85490196078431369" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -112,7 +112,7 @@
                                     <constraint firstItem="eq-view" firstAttribute="bottom" secondItem="group-view" secondAttribute="bottom" id="eq-bottom"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Infos trafic · Podcasts · Dédicaces" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="features-label">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Infos trafic · Podcasts · Dédicaces" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" tag="12" alpha="0.0" id="features-label">
                                 <rect key="frame" x="32" y="763" width="329" height="15"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
                                 <color key="textColor" red="0.66274509803921566" green="0.76470588235294112" blue="0.85490196078431369" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

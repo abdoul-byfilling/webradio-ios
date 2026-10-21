@@ -128,14 +128,18 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     }
 
     // MARK: - Launch Screen
-    // L'écran de lancement prend vie : même storyboard, égaliseur animé,
-    // jusqu'au premier chargement du site, sans durée minimale (contrat §4)
+    // L'écran de lancement prend vie : même storyboard, textes en fondu,
+    // égaliseur animé, jusqu'au premier chargement du site, sans durée
+    // minimale (contrat §4)
     private var launchCoverController: UIViewController?
     private var launchCover: UIView? { return launchCoverController?.view }
     
     // Décalage de chaque barre dans son cycle d'une seconde, comme la maquette
     // « Démarrage » ; les hauteurs du storyboard sont celles de l'instant 0
     private let equalizerPhases: [CFTimeInterval] = [0, 0.45, 0.2, 0.7, 0.1]
+    
+    // Textes du storyboard, transparents sur l'écran système
+    private let launchTextTags = [10, 11, 12]
 
     private func showLaunchCover() {
         // Contrôleur enfant : la vue garde la même zone sûre que l'écran système
@@ -151,7 +155,24 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
             setStatusBarColor(color)
         }
         cover.layoutIfNeeded()
+        showLaunchTexts(in: cover)
         animateEqualizer(in: cover)
+    }
+    
+    // Fondu des textes l'un après l'autre ; d'un coup si « Réduire les
+    // animations » est activé
+    private func showLaunchTexts(in cover: UIView) {
+        let reduceMotion = UIAccessibility.isReduceMotionEnabled
+        for (index, tag) in launchTextTags.enumerated() {
+            guard let label = cover.viewWithTag(tag) else { continue }
+            if reduceMotion {
+                label.alpha = 1
+            } else {
+                UIView.animate(withDuration: 0.8, delay: 0.2 * Double(index), options: [.curveEaseOut], animations: {
+                    label.alpha = 1
+                })
+            }
+        }
     }
     
     // Les barres du storyboard (tags 1 à 5) sont remplacées par des calques
