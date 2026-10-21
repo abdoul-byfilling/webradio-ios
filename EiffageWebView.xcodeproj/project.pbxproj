@@ -16,7 +16,6 @@
 		A1234567890ABCDEF1234575 /* ConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1234567890ABCDEF1234574 /* ConnectivityManager.swift */; };
 		A1234567890ABCDEF1234577 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1234567890ABCDEF1234576 /* SettingsViewController.swift */; };
 		A1234567890ABCDEF1234579 /* OfflineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1234567890ABCDEF1234578 /* OfflineViewController.swift */; };
-		A1234567890ABCDEF1234581 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1234567890ABCDEF123457A /* LaunchViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,7 +30,6 @@
 		A1234567890ABCDEF1234574 /* ConnectivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectivityManager.swift; sourceTree = "<group>"; };
 		A1234567890ABCDEF1234576 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		A1234567890ABCDEF1234578 /* OfflineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineViewController.swift; sourceTree = "<group>"; };
-		A1234567890ABCDEF123457A /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,7 +49,6 @@
 				A1234567890ABCDEF1234566 /* AppDelegate.swift */,
 				A1234567890ABCDEF1234568 /* SceneDelegate.swift */,
 				A1234567890ABCDEF123456A /* WebViewController.swift */,
-				A1234567890ABCDEF123457A /* LaunchViewController.swift */,
 				A1234567890ABCDEF1234576 /* SettingsViewController.swift */,
 				A1234567890ABCDEF1234578 /* OfflineViewController.swift */,
 				A1234567890ABCDEF1234574 /* ConnectivityManager.swift */,
@@ -156,7 +153,6 @@
 				A1234567890ABCDEF1234575 /* ConnectivityManager.swift in Sources */,
 				A1234567890ABCDEF1234577 /* SettingsViewController.swift in Sources */,
 				A1234567890ABCDEF1234579 /* OfflineViewController.swift in Sources */,
-				A1234567890ABCDEF1234581 /* LaunchViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

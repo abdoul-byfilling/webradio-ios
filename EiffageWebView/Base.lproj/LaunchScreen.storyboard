@@ -11,7 +11,7 @@
         <!--Launch View Controller-->
         <scene sceneID="EHf-IW-A2E">
             <objects>
-                <viewController id="01J-lp-oVM" customClass="LaunchViewController" customModule="EiffageWebView" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="01J-lp-oVM" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -92,14 +92,6 @@
                             <constraint firstItem="main-container-view" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="main-container-center-y"/>
                         </constraints>
                     </view>
-                    <connections>
-                        <outlet property="gradientBackgroundView" destination="gradient-bg-view" id="gradient-bg-outlet"/>
-                        <outlet property="logoContainer" destination="logo-shadow-container" id="logo-container-outlet"/>
-                        <outlet property="appIconImageView" destination="app-icon-image-view" id="app-icon-outlet"/>
-                        <outlet property="mainContainer" destination="main-container-view" id="main-container-outlet"/>
-                        <outlet property="companyLabel" destination="company-name-label" id="company-label-outlet"/>
-                        <outlet property="subtitleLabel" destination="subtitle-label" id="subtitle-label-outlet"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="launch-first-resp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
