@@ -13,6 +13,7 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     private let appPrefix = "https://www.eiffageconcessionssenegal.sn/app3/"
     private var connectivityManager = ConnectivityManager()
     private var progressObserver: NSKeyValueObservation?
+    private var themeColorObserver: NSKeyValueObservation?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -26,6 +27,7 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     
     deinit {
         progressObserver?.invalidate()
+        themeColorObserver?.invalidate()
         connectivityManager.stopMonitoring()
     }
 
@@ -54,11 +56,13 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         webView = WKWebView(frame: .zero, configuration: configuration)
         webView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(webView)
+        // Sous la barre d'état, qui garde la couleur annoncée par le site
+        // (contrat §4) ; en bas, WebKit prolonge la page sous la barre d'accueil
         NSLayoutConstraint.activate([
             webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            webView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            webView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            webView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
 
         webView.navigationDelegate = self
@@ -69,6 +73,16 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         progressObserver = webView.observe(\.estimatedProgress, options: [.new]) { [weak self] _, _ in
             DispatchQueue.main.async {
                 self?.updateProgress()
+            }
+        }
+        
+        // Couleur de la barre d'état : <meta name="theme-color"> du site, suivie
+        // même quand elle change sans rechargement (contrat §4)
+        themeColorObserver = webView.observe(\.themeColor, options: [.new]) { [weak self] webView, _ in
+            DispatchQueue.main.async {
+                if let color = webView.themeColor {
+                    self?.setStatusBarColor(color)
+                }
             }
         }
     }
@@ -97,14 +111,26 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         webView.load(request)
     }
     
+    // MARK: - Status Bar
+    // La vue derrière la barre d'état prend la couleur du site ; les icônes
+    // sont foncées sur fond clair, claires sur fond foncé
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        guard let color = launchCover?.backgroundColor ?? view.backgroundColor else { return .default }
+        var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0, alpha: CGFloat = 0
+        color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        let luminance = 0.299 * red + 0.587 * green + 0.114 * blue
+        return luminance > 0.6 ? .darkContent : .lightContent
+    }
+    
+    private func setStatusBarColor(_ color: UIColor) {
+        view.backgroundColor = color
+        setNeedsStatusBarAppearanceUpdate()
+    }
+
     // MARK: - Launch Screen
     // L'écran de lancement reste affiché jusqu'au premier chargement du
     // site, au lieu d'un écran blanc (contrat §4)
     private var launchCover: UIView?
-
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return launchCover != nil ? .lightContent : .default
-    }
 
     private func showLaunchCover() {
         guard let cover = UIStoryboard(name: "LaunchScreen", bundle: nil).instantiateInitialViewController()?.view else { return }
@@ -112,6 +138,9 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         cover.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(cover)
         launchCover = cover
+        if let color = cover.backgroundColor {
+            setStatusBarColor(color)
+        }
     }
 
     private func hideLaunchCover() {
