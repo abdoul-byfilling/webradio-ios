@@ -12,7 +12,7 @@ Webview (WKWebView) qui affiche le site de la radio
 - iOS minimum : 15
 - Version publiée : **2 (build 2)**, envoyée le 2025-07-07
 - Version dans ce code : **2.1 (build 3)**, pas encore publiée
-- Contrat respecté : **aucun pour l'instant**, objectif version 1
+- Contrat respecté : **aucun pour l'instant**, objectif version 2
 
 ## Origine
 
@@ -62,14 +62,18 @@ iOS 18.5) :
 Aussi corrigé : le projet ne compilait pas (`LaunchScreen.storyboard`
 utilisait `LaunchViewController`, interdit pour un écran de lancement).
 
-Reste avant de pouvoir annoncer la version 1 du contrat :
+Contrat version 2 (2026-10-21) : la barre d'état prend la couleur de
+`<meta name="theme-color">` du site, y compris au changement de thème sans
+rechargement (vérifié sur simulateur). Le site doit être déployé avant la
+publication de l'app : la version en ligne annonce encore `#1976D2`.
 
-- **Écran de lancement (§4)** : fait le 2026-10-21 d'après la maquette
-  « Démarrage » (fond `#0B2545`, logo dans un carré blanc arrondi), mais
-  logo seul comme le demande le contrat : ni nom, ni slogan, ni animation
-  d'égaliseur. Il reste affiché jusqu'au premier chargement du site. À
-  valider ensemble ; si le texte de la maquette est voulu, modifier
-  d'abord le contrat.
+Reste avant de pouvoir annoncer la version 2 du contrat :
+
+- **Image de démarrage (§4)** : image fixe bord à bord reprenant la
+  maquette « Démarrage », fournie par le site. En attendant, l'écran de
+  lancement affiche le logo seul sur fond `#0B2545` ; à remplacer par un
+  `UIImageView` plein écran en *Aspect Fill*, contraint aux bords de la vue,
+  dans `LaunchScreen.storyboard`.
 - **Recette du §9 sur un iPhone**, en particulier : radio écran verrouillé
   et commandes de l'écran verrouillé (Media Session du site), demande du
   micro et envoi d'une dédicace, `tel:` / `mailto:` / WhatsApp, geste
