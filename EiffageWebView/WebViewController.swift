@@ -7,14 +7,12 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     // MARK: - Properties
     private var webView: WKWebView!
     @IBOutlet weak var progressView: UIProgressView!
-    @IBOutlet weak var toolbarBottomConstraint: NSLayoutConstraint!
     
     // Adresse chargée et partie du site qui reste dans l'app (contrat §1)
     private let targetURL = "https://www.eiffageconcessionssenegal.sn/app3/index.php"
     private let appPrefix = "https://www.eiffageconcessionssenegal.sn/app3/"
     private var connectivityManager = ConnectivityManager()
     private var progressObserver: NSKeyValueObservation?
-    private var isInitialLoad = true
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -25,34 +23,16 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         loadWebsite()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: animated)
-    }
-    
     deinit {
         progressObserver?.invalidate()
         connectivityManager.stopMonitoring()
     }
-    
+
     // MARK: - Setup Methods
     private func setupUI() {
-        title = "Eiffage Concessions"
-        
-        // Navigation bar setup
-        navigationController?.navigationBar.prefersLargeTitles = false
-        navigationController?.navigationBar.tintColor = UIColor.systemBlue
-        
-        // Navigation bar buttons
-        let refreshButton = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refreshWebView))
-        let settingsButton = UIBarButtonItem(image: UIImage(systemName: "gear"), style: .plain, target: self, action: #selector(showSettings))
-        
-        navigationItem.rightBarButtonItems = [settingsButton, refreshButton]
-        
-        // Back button (only show when can go back)
-        updateNavigationButtons()
-        
+        // Pas de barre native : le site a sa propre navigation
         // Progress view setup
+        view.bringSubviewToFront(progressView)
         progressView.progressTintColor = UIColor.systemBlue
         progressView.trackTintColor = UIColor.systemGray5
         progressView.isHidden = true
@@ -74,7 +54,7 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         webView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(webView)
         NSLayoutConstraint.activate([
-            webView.topAnchor.constraint(equalTo: progressView.bottomAnchor),
+            webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             webView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             webView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             webView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
@@ -141,17 +121,6 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         }
     }
     
-    // MARK: - Navigation Management
-    private func updateNavigationButtons() {
-        let backButton = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(goBack))
-        
-        if webView.canGoBack {
-            navigationItem.leftBarButtonItem = backButton
-        } else {
-            navigationItem.leftBarButtonItem = nil
-        }
-    }
-    
     // MARK: - Connectivity Handling
     private func handleConnectivityLost() {
         let offlineVC = OfflineViewController()
@@ -183,23 +152,6 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         present(alert, animated: true)
     }
     
-    // MARK: - Actions
-    @objc private func refreshWebView() {
-        webView.reload()
-    }
-    
-    @objc private func goBack() {
-        if webView.canGoBack {
-            webView.goBack()
-        }
-    }
-    
-    @objc private func showSettings() {
-        let settingsVC = SettingsViewController()
-        let navController = UINavigationController(rootViewController: settingsVC)
-        present(navController, animated: true)
-    }
-    
     // MARK: - WKNavigationDelegate
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         updateProgress()
@@ -207,8 +159,6 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         updateProgress()
-        updateNavigationButtons()
-        isInitialLoad = false
     }
     
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {

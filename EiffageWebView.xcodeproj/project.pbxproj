@@ -14,7 +14,6 @@
 		A1234567890ABCDEF1234570 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1234567890ABCDEF123456F /* Assets.xcassets */; };
 		A1234567890ABCDEF1234573 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1234567890ABCDEF1234571 /* LaunchScreen.storyboard */; };
 		A1234567890ABCDEF1234575 /* ConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1234567890ABCDEF1234574 /* ConnectivityManager.swift */; };
-		A1234567890ABCDEF1234577 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1234567890ABCDEF1234576 /* SettingsViewController.swift */; };
 		A1234567890ABCDEF1234579 /* OfflineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1234567890ABCDEF1234578 /* OfflineViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -28,7 +27,6 @@
 		A1234567890ABCDEF1234572 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A1234567890ABCDEF1234580 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A1234567890ABCDEF1234574 /* ConnectivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectivityManager.swift; sourceTree = "<group>"; };
-		A1234567890ABCDEF1234576 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		A1234567890ABCDEF1234578 /* OfflineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -49,7 +47,6 @@
 				A1234567890ABCDEF1234566 /* AppDelegate.swift */,
 				A1234567890ABCDEF1234568 /* SceneDelegate.swift */,
 				A1234567890ABCDEF123456A /* WebViewController.swift */,
-				A1234567890ABCDEF1234576 /* SettingsViewController.swift */,
 				A1234567890ABCDEF1234578 /* OfflineViewController.swift */,
 				A1234567890ABCDEF1234574 /* ConnectivityManager.swift */,
 				A1234567890ABCDEF123456C /* Main.storyboard */,
@@ -151,7 +148,6 @@
 				A1234567890ABCDEF1234567 /* AppDelegate.swift in Sources */,
 				A1234567890ABCDEF1234569 /* SceneDelegate.swift in Sources */,
 				A1234567890ABCDEF1234575 /* ConnectivityManager.swift in Sources */,
-				A1234567890ABCDEF1234577 /* SettingsViewController.swift in Sources */,
 				A1234567890ABCDEF1234579 /* OfflineViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
