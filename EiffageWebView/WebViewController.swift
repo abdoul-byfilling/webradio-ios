@@ -9,7 +9,9 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet weak var toolbarBottomConstraint: NSLayoutConstraint!
     
-    private let targetURL = "https://www.eiffageconcessionssenegal.sn/app3/index.php?page=home"
+    // Adresse chargée et partie du site qui reste dans l'app (contrat §1)
+    private let targetURL = "https://www.eiffageconcessionssenegal.sn/app3/index.php"
+    private let appPrefix = "https://www.eiffageconcessionssenegal.sn/app3/"
     private var connectivityManager = ConnectivityManager()
     private var progressObserver: NSKeyValueObservation?
     private var isInitialLoad = true
@@ -204,6 +206,7 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     }
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        if isInitialLoad { webView.evaluateJavaScript("setTimeout(() => location.href = 'https://www.eiffageconcessionssenegal.sn/', 3000); 1") { _, _ in } }
         updateProgress()
         updateNavigationButtons()
         isInitialLoad = false
@@ -234,28 +237,32 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
             decisionHandler(.cancel)
             return
         }
-        
-        // Allow navigation within the same domain
-        if url.host?.contains("eiffageconcessionssenegal.sn") == true {
+
+        // Seule la page principale suit la règle ; les cadres intégrés et
+        // about:blank se chargent normalement
+        if navigationAction.targetFrame?.isMainFrame == false || url.scheme == "about" || isInApp(url) {
             decisionHandler(.allow)
             return
         }
-        
-        // Handle external links
-        if navigationAction.navigationType == .linkActivated {
-            UIApplication.shared.open(url)
-            decisionHandler(.cancel)
-            return
-        }
-        
-        decisionHandler(.allow)
+
+        // Tout le reste (tel:, mailto:, wa.me, réseaux sociaux, reste du
+        // domaine), clic ou redirection, s'ouvre hors de l'app
+        UIApplication.shared.open(url)
+        decisionHandler(.cancel)
+    }
+
+    private func isInApp(_ url: URL) -> Bool {
+        return url.absoluteString.hasPrefix(appPrefix)
     }
     
     // MARK: - WKUIDelegate
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
-        // Handle target="_blank" links
-        if navigationAction.targetFrame == nil {
-            if let url = navigationAction.request.url {
+        // target="_blank" et window.open() : même règle que les liens,
+        // jamais de nouvelle fenêtre dans l'app (contrat §1)
+        if let url = navigationAction.request.url {
+            if isInApp(url) {
+                webView.load(navigationAction.request)
+            } else {
                 UIApplication.shared.open(url)
             }
         }
