@@ -12,7 +12,7 @@ Webview (WKWebView) qui affiche le site de la radio
 - iOS minimum : 15
 - Version publiée : **2 (build 2)**, envoyée le 2025-07-07
 - Version dans ce code : **2.1 (build 3)**, pas encore publiée
-- Contrat respecté : **aucun pour l'instant**, objectif version 3
+- Contrat respecté : **aucun pour l'instant**, objectif version 4
 
 ## Origine
 
@@ -62,15 +62,16 @@ iOS 18.5) :
 Aussi corrigé : le projet ne compilait pas (`LaunchScreen.storyboard`
 utilisait `LaunchViewController`, interdit pour un écran de lancement).
 
-Contrats version 2 et 3 (2026-10-21), faits et vérifiés sur simulateur :
+Contrats versions 2 à 4 (2026-10-21), faits et vérifiés sur simulateur :
 
 - Barre d'état à la couleur de `<meta name="theme-color">` du site, y
   compris au changement de thème sans rechargement.
 - Écran de démarrage (§4) d'après la maquette « Démarrage » : fond
   `#0B2545` bord à bord, logo, les trois textes du contrat, égaliseur.
-  `LaunchScreen.storyboard` en est la première image ; l'app recharge ce
-  storyboard et anime l'égaliseur (immobile avec « Réduire les
-  animations »), jusqu'au premier chargement du site. Les barres n'ont pas
+  `LaunchScreen.storyboard` en est la première image (textes transparents) ;
+  l'app recharge ce storyboard, fait apparaître les textes en fondu et
+  anime l'égaliseur (textes d'un coup et égaliseur immobile avec « Réduire
+  les animations »), jusqu'au premier chargement du site. Les barres n'ont pas
   de coins arrondis : Xcode refuse les attributs personnalisés dans un
   écran de lancement.
 
@@ -78,7 +79,7 @@ Le site doit être déployé avant la publication de l'app : la version en
 ligne annonce encore `theme-color` `#1976D2` (barre d'état bleue au-dessus
 d'un en-tête gris clair).
 
-Reste avant de pouvoir annoncer la version 3 du contrat :
+Reste avant de pouvoir annoncer la version 4 du contrat :
 
 - **Recette du §9 sur un iPhone**, en particulier : démarrage sans saut
   entre l'écran système et l'écran animé, radio écran verrouillé et
