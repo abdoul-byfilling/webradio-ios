@@ -73,12 +73,12 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     }
     
     private func setupConnectivityMonitoring() {
+        // Une coupure pendant l'écoute ne masque pas le site ; le retour du
+        // réseau recharge seulement si l'écran « Pas de connexion » est affiché
         connectivityManager.onConnectivityChanged = { [weak self] isConnected in
             DispatchQueue.main.async {
-                if isConnected {
-                    self?.handleConnectivityRestored()
-                } else {
-                    self?.handleConnectivityLost()
+                if isConnected && self?.presentedViewController is OfflineViewController {
+                    self?.loadWebsite()
                 }
             }
         }
@@ -122,27 +122,49 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     }
     
     // MARK: - Connectivity Handling
-    private func handleConnectivityLost() {
+    // Écran « Pas de connexion » quand le site ne se charge pas (contrat §3).
+    // Il reste affiché pendant les nouvelles tentatives et se ferme dès que
+    // le site répond.
+    private func showOffline() {
+        guard presentedViewController == nil else { return }
         let offlineVC = OfflineViewController()
         offlineVC.onRetryTapped = { [weak self] in
-            self?.dismiss(animated: true) {
-                self?.loadWebsite()
-            }
+            self?.loadWebsite()
         }
-        
+
         offlineVC.modalPresentationStyle = .fullScreen
         present(offlineVC, animated: true)
     }
-    
-    private func handleConnectivityRestored() {
+
+    private func hideOffline() {
         if presentedViewController is OfflineViewController {
-            dismiss(animated: true) {
-                self.loadWebsite()
-            }
+            dismiss(animated: true)
         }
     }
-    
+
     // MARK: - Error Handling
+    private let offlineErrorCodes: Set<Int> = [
+        NSURLErrorNotConnectedToInternet, NSURLErrorNetworkConnectionLost,
+        NSURLErrorTimedOut, NSURLErrorCannotFindHost, NSURLErrorCannotConnectToHost,
+        NSURLErrorDNSLookupFailed, NSURLErrorInternationalRoamingOff, NSURLErrorDataNotAllowed
+    ]
+
+    private func handleLoadError(_ error: Error) {
+        updateProgress()
+        let nsError = error as NSError
+
+        // Chargement interrompu par un autre clic ou par un lien ouvert hors
+        // de l'app : rien à signaler
+        if nsError.domain == NSURLErrorDomain && nsError.code == NSURLErrorCancelled { return }
+        if nsError.domain == WKError.errorDomain && nsError.code == 102 { return }
+
+        if !connectivityManager.isConnected || (nsError.domain == NSURLErrorDomain && offlineErrorCodes.contains(nsError.code)) {
+            showOffline()
+        } else if presentedViewController == nil {
+            showError("Impossible de charger la page : \(error.localizedDescription)")
+        }
+    }
+
     private func showError(_ message: String) {
         let alert = UIAlertController(title: "Erreur", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Réessayer", style: .default) { _ in
@@ -157,28 +179,20 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         updateProgress()
     }
     
+    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
+        hideOffline()
+    }
+
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         updateProgress()
     }
-    
+
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-        updateProgress()
-        
-        if !connectivityManager.isConnected {
-            handleConnectivityLost()
-        } else {
-            showError("Erreur de chargement: \(error.localizedDescription)")
-        }
+        handleLoadError(error)
     }
-    
+
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-        updateProgress()
-        
-        if !connectivityManager.isConnected {
-            handleConnectivityLost()
-        } else {
-            showError("Impossible de charger la page: \(error.localizedDescription)")
-        }
+        handleLoadError(error)
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
