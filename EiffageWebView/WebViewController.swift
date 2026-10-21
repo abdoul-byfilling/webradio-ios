@@ -206,7 +206,6 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     }
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        if isInitialLoad { webView.evaluateJavaScript("setTimeout(() => location.href = 'https://www.eiffageconcessionssenegal.sn/', 3000); 1") { _, _ in } }
         updateProgress()
         updateNavigationButtons()
         isInitialLoad = false
