@@ -12,7 +12,7 @@ Webview (WKWebView) qui affiche le site de la radio
 - iOS minimum : 15
 - Version publiée : **2 (build 2)**, envoyée le 2025-07-07
 - Version dans ce code : **2.1 (build 3)**, pas encore publiée
-- Contrat respecté : **aucun pour l'instant**, objectif version 2
+- Contrat respecté : **aucun pour l'instant**, objectif version 3
 
 ## Origine
 
@@ -62,20 +62,27 @@ iOS 18.5) :
 Aussi corrigé : le projet ne compilait pas (`LaunchScreen.storyboard`
 utilisait `LaunchViewController`, interdit pour un écran de lancement).
 
-Contrat version 2 (2026-10-21) : la barre d'état prend la couleur de
-`<meta name="theme-color">` du site, y compris au changement de thème sans
-rechargement (vérifié sur simulateur). Le site doit être déployé avant la
-publication de l'app : la version en ligne annonce encore `#1976D2`.
+Contrats version 2 et 3 (2026-10-21), faits et vérifiés sur simulateur :
 
-Reste avant de pouvoir annoncer la version 2 du contrat :
+- Barre d'état à la couleur de `<meta name="theme-color">` du site, y
+  compris au changement de thème sans rechargement.
+- Écran de démarrage (§4) d'après la maquette « Démarrage » : fond
+  `#0B2545` bord à bord, logo, les trois textes du contrat, égaliseur.
+  `LaunchScreen.storyboard` en est la première image ; l'app recharge ce
+  storyboard et anime l'égaliseur (immobile avec « Réduire les
+  animations »), jusqu'au premier chargement du site. Les barres n'ont pas
+  de coins arrondis : Xcode refuse les attributs personnalisés dans un
+  écran de lancement.
 
-- **Image de démarrage (§4)** : image fixe bord à bord reprenant la
-  maquette « Démarrage », fournie par le site. En attendant, l'écran de
-  lancement affiche le logo seul sur fond `#0B2545` ; à remplacer par un
-  `UIImageView` plein écran en *Aspect Fill*, contraint aux bords de la vue,
-  dans `LaunchScreen.storyboard`.
-- **Recette du §9 sur un iPhone**, en particulier : radio écran verrouillé
-  et commandes de l'écran verrouillé (Media Session du site), demande du
+Le site doit être déployé avant la publication de l'app : la version en
+ligne annonce encore `theme-color` `#1976D2` (barre d'état bleue au-dessus
+d'un en-tête gris clair).
+
+Reste avant de pouvoir annoncer la version 3 du contrat :
+
+- **Recette du §9 sur un iPhone**, en particulier : démarrage sans saut
+  entre l'écran système et l'écran animé, radio écran verrouillé et
+  commandes de l'écran verrouillé (Media Session du site), demande du
   micro et envoi d'une dédicace, `tel:` / `mailto:` / WhatsApp, geste
   retour, mode avion. Sur simulateur, la radio continue app en
   arrière-plan.
