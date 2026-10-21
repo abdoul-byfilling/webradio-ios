@@ -1,10 +1,13 @@
 import UIKit
+import AVFoundation
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        // La radio continue écran verrouillé ou app en arrière-plan
+        // (avec UIBackgroundModes = audio dans Info.plist, contrat §6)
+        try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
         return true
     }
 
