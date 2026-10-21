@@ -1,143 +1,69 @@
-# EiffageWebView - Application iOS Native
+# Radio de l'Avenir — application iOS
 
-Application iOS native en Swift utilisant WKWebView pour afficher le site web d'Eiffage Concessions Sénégal.
+Webview (WKWebView) qui affiche le site de la radio
+(https://www.eiffageconcessionssenegal.sn/app3/). Tout le contenu vient du site
+(dépôt `webradio-app`) ; les règles entre le site et l'app sont dans son
+`docs/app-native.md`.
 
-## Fonctionnalités
+- App Store : « Radio de l'Avenir - SECAA », id 1669289109, vendeur SENAC SA
+- Identifiant : `com.icreo.radiodelavenir` (celui de l'ancienne app RadioKing,
+  gardé pour que les utilisateurs passent à cette app par une simple mise à jour)
+- Équipe Apple : `39NW638GX5` (SENAC SA) — signature automatique par Xcode
+- iOS minimum : 15
+- Version publiée : **2 (build 2)**, envoyée le 2025-07-07
+- Version dans ce code : **2.1 (build 3)**, pas encore publiée
+- Contrat respecté : **aucun pour l'instant**, objectif version 1
 
-### ✅ Fonctionnalités Principales
-- **WebView Principal** : Charge `https://www.eiffageconcessionssenegal.sn/app3/index.php?page=home`
-- **Barre de Progression** : Indicateur de chargement synchronisé avec WKWebView
-- **Gestion Offline** : Écran personnalisé "Pas de connexion" avec détection automatique
-- **Menu Paramètres** : Options de nettoyage du cache et des cookies
-- **Navigation Native** : Boutons retour, actualisation et paramètres
+## Origine
 
-### 🎨 Interface Utilisateur
-- Design iOS natif conforme aux guidelines Apple
-- Barre de navigation système avec boutons d'action
-- Écran offline élégant avec animations
-- Menu paramètres complet et intuitif
-- Support du mode sombre/clair automatique
+La source exacte de la 2.0 est introuvable (elle était dans
+`/Users/attila/Downloads/project` sur le Mac, d'après l'archive Xcode). Ce dépôt
+part du projet Bolt `EiffageWebView` (même nom de projet, mêmes écrans), aligné
+sur la 2.0 d'après son archive : identifiant, équipe, nom affiché, version,
+iOS 15, micro déclaré, audio en arrière-plan, arm64, icône.
 
-### 🔧 Fonctionnalités Techniques
-- **WKWebView** avec délégation complète de navigation
-- **Network Framework** pour la détection de connectivité
-- **Gestion des erreurs** robuste avec alertes utilisateur
-- **Liens externes** ouverts dans Safari
-- **Cache et cookies** gérés via WKWebsiteDataStore
+Différences connues avec la 2.0, non reproduites faute de source :
 
-## Structure du Projet
+- la 2.0 avait un écran de démarrage animé (`SplashViewController`) ; ici,
+  seul l'écran de lancement statique (`LaunchScreen.storyboard`) s'affiche,
+  ce que demande justement le contrat (§4). `LaunchViewController.swift`
+  n'est utilisé nulle part (code mort) ;
+- la 2.0 demandait elle-même l'autorisation du micro (messages « Permission
+  microphone accordée / refusée ») ;
+- la 2.0 autorisait la page à lire les fichiers locaux
+  (`allowFileAccessFromFileURLs`, `allowUniversalAccessFromFileURLs`) : à ne
+  pas reprendre.
 
-```
-EiffageWebView/
-├── EiffageWebView.xcodeproj/     # Projet Xcode
-├── EiffageWebView/
-│   ├── AppDelegate.swift         # Délégué d'application
-│   ├── SceneDelegate.swift       # Délégué de scène
-│   ├── WebViewController.swift   # Contrôleur principal WebView
-│   ├── SettingsViewController.swift # Menu paramètres
-│   ├── OfflineViewController.swift  # Écran offline
-│   ├── ConnectivityManager.swift    # Gestionnaire de connectivité
-│   ├── Main.storyboard          # Interface utilisateur
-│   ├── LaunchScreen.storyboard  # Écran de lancement
-│   ├── Assets.xcassets/         # Ressources graphiques
-│   └── Info.plist              # Configuration de l'app
-└── README.md
-```
+## Compiler et publier
 
-## Installation et Utilisation
+Sur le Mac : ouvrir `EiffageWebView.xcodeproj` dans Xcode, choisir l'équipe
+SENAC SA si Xcode la demande, lancer sur un iPhone. Pour publier :
+Product → Archive, puis Distribute App → App Store Connect.
 
-### Prérequis
-- macOS avec Xcode 15.0+
-- iOS 13.0+ (cible de déploiement)
-- Compte développeur Apple (pour déploiement sur appareil)
+## Écarts avec le contrat (relevés le 2026-10-21)
 
-### Étapes d'Installation
+1. **User-Agent** : `customUserAgent` remplace tout par un faux Safari iOS 15,
+   sans marqueur. Contrat §2 : garder le User-Agent du système et ajouter
+   `WebRadioAvenirApp/<version>` (`configuration.applicationNameForUserAgent`).
+2. **Configuration de la webview** : `setupWebView()` crée une
+   `WKWebViewConfiguration` qui n'est jamais utilisée (la webview vient du
+   storyboard) : créer la webview en code avec sa configuration (lecture en
+   ligne, User-Agent, données du site persistantes).
+3. **Micro** : aucune réponse à `requestMediaCapturePermissionFor` (iOS 15+) :
+   accorder le micro seulement pour `https://www.eiffageconcessionssenegal.sn`.
+   Texte de la demande à simplifier (contrat §5 : « Le micro sert à
+   enregistrer votre dédicace vocale. »).
+4. **Liens** : tout le domaine reste dans l'app, y compris le site WordPress
+   d'Eiffage ; les redirections hors domaine qui ne sont pas des clics
+   restent aussi dans l'app. Contrat §1 : seulement `/app3/` dans l'app.
+5. **Interface native en trop** : barre de navigation « Eiffage Concessions »
+   (titre, retour, actualiser, réglages) au-dessus du site, qui a déjà sa
+   propre navigation ; écran Réglages (vider le cache / les cookies) inutile.
+6. **`NSAllowsArbitraryLoads`** : autorise les connexions non chiffrées sans
+   raison (le site est en https) ; à retirer.
+7. **Orientation** : paysage autorisé sur iPhone ; le site est conçu en
+   portrait.
+8. **Écran hors connexion** : présent (bien) ; vérifier qu'il recharge le site.
 
-1. **Ouvrir le Projet**
-   ```bash
-   # Ouvrir le fichier projet dans Xcode
-   open EiffageWebView.xcodeproj
-   ```
-
-2. **Configuration**
-   - Sélectionner votre équipe de développement dans les paramètres du projet
-   - Modifier le Bundle Identifier si nécessaire : `com.eiffage.webview`
-   - Vérifier les paramètres de signature de code
-
-3. **Compilation et Test**
-   - Sélectionner un simulateur iOS ou un appareil connecté
-   - Appuyer sur `Cmd + R` pour compiler et lancer l'application
-
-### Déploiement App Store
-
-L'application est conçue pour respecter les guidelines de l'App Store :
-
-- ✅ **Fonctionnalités natives** : Barre de progression, gestion offline, paramètres
-- ✅ **Interface utilisateur native** : Design iOS conforme aux HIG
-- ✅ **Gestion des erreurs** : Alertes et écrans d'erreur appropriés
-- ✅ **Permissions** : Accès réseau uniquement (NSAppTransportSecurity configuré)
-- ✅ **Performance** : Optimisations WebView et gestion mémoire
-
-## Configuration Technique
-
-### URL Cible
-```swift
-private let targetURL = "https://www.eiffageconcessionssenegal.sn/app3/index.php?page=home"
-```
-
-### Paramètres WebView
-- **User Agent** : Configuré pour iOS Safari
-- **Media Playback** : Lecture automatique activée
-- **JavaScript** : Activé par défaut
-- **Cookies** : Gestion automatique avec options de nettoyage
-
-### Sécurité Réseau
-- **ATS (App Transport Security)** : Configuré pour permettre HTTP/HTTPS
-- **Domaines autorisés** : Navigation limitée au domaine Eiffage
-- **Liens externes** : Redirection automatique vers Safari
-
-## Personnalisation
-
-### Modifier l'URL du Site
-```swift
-// Dans WebViewController.swift
-private let targetURL = "VOTRE_URL_ICI"
-```
-
-### Personnaliser l'Interface
-- **Couleurs** : Modifier les couleurs dans `Assets.xcassets`
-- **Icône** : Remplacer les icônes dans `AppIcon.appiconset`
-- **Titre** : Modifier dans `WebViewController.swift` et `Info.plist`
-
-### Ajouter des Fonctionnalités
-- **Push Notifications** : Ajouter le framework UserNotifications
-- **Analytics** : Intégrer Firebase ou autre solution
-- **Partage** : Ajouter UIActivityViewController
-
-## Support et Maintenance
-
-### Logs et Débogage
-L'application utilise les logs système iOS. Pour déboguer :
-```bash
-# Voir les logs en temps réel
-xcrun simctl spawn booted log stream --predicate 'process == "EiffageWebView"'
-```
-
-### Problèmes Courants
-1. **Erreur de chargement** : Vérifier la connectivité et l'URL
-2. **Problème de certificat** : Configurer ATS dans Info.plist
-3. **Performance** : Optimiser le cache WebView
-
-### Mises à Jour
-- Tester régulièrement avec les nouvelles versions d'iOS
-- Mettre à jour les dépendances Xcode
-- Vérifier la compatibilité du site web
-
-## Licence
-
-MIT License - Voir le fichier LICENSE pour plus de détails.
-
----
-
-**Développé pour Eiffage Concessions Sénégal**  
-Application iOS native optimisée pour l'App Store
+À vérifier sur un iPhone : radio écran verrouillé (contrat §6), commandes de
+l'écran verrouillé (Media Session du site).
