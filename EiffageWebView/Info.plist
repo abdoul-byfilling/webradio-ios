@@ -24,11 +24,6 @@
 	<true/>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Le micro sert à enregistrer votre dédicace vocale.</string>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
