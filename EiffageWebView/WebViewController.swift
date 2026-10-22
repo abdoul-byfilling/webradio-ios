@@ -28,7 +28,7 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         // Page demandée par une notification touchée (contrat §8) ; après
         // l'accueil, pour qu'elle le remplace si l'app vient d'être lancée
         PushNotifications.shared.onOpenURL = { [weak self] url in
-            self?.webView.load(URLRequest(url: url))
+            self?.openFromNotification(url)
         }
     }
     
@@ -116,6 +116,24 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         
         let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 30)
         webView.load(request)
+    }
+    
+    // MARK: - Notification
+    // Le site affiche la page sur place s'il le peut (window.tavOpenFromApp),
+    // sans recharger : la radio continue. Sinon (site pas encore chargé,
+    // écran saisonnier), chargement normal (contrat §8)
+    private func openFromNotification(_ url: URL) {
+        guard let data = try? JSONSerialization.data(withJSONObject: [url.absoluteString]),
+              let argument = String(data: data, encoding: .utf8) else {
+            webView.load(URLRequest(url: url))
+            return
+        }
+        let script = "typeof window.tavOpenFromApp === 'function' && window.tavOpenFromApp(\(argument)[0]) === true"
+        webView.evaluateJavaScript(script) { [weak self] result, _ in
+            if result as? Bool != true {
+                self?.webView.load(URLRequest(url: url))
+            }
+        }
     }
     
     // MARK: - Status Bar
