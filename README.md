@@ -12,7 +12,7 @@ Webview (WKWebView) qui affiche le site de la radio
 - iOS minimum : 15
 - Version publiée : **2 (build 2)**, envoyée le 2025-07-07
 - Version dans ce code : **2.1 (build 3)**, pas encore publiée
-- Contrat respecté : **aucun pour l'instant**, objectif version 5
+- Contrat respecté : **aucun pour l'instant**, objectif version 8
 
 ## Origine
 
@@ -45,7 +45,9 @@ Les messages se rédigent dans Administration > Notifications du site et
 partent par Firebase Cloud Messaging. L'app (`PushNotifications.swift`)
 demande l'autorisation une fois après l'accueil, inscrit son jeton à
 `api/push-register.php`, affiche la bannière même ouverte et, au toucher,
-charge `data.url` s'il est sous `/app3/` (sinon l'accueil).
+ouvre `data.url` s'il est sous `/app3/` (sinon l'accueil) : app déjà
+ouverte, par `window.spa.navigateTo` sans recharger, pour que la radio
+continue ; sinon par un chargement normal.
 
 Hors du dépôt (`.gitignore`) : `GoogleService-Info.plist` et la clé APNs
 `*.p8`. Sans `GoogleService-Info.plist`, l'app compile et fonctionne, sans
@@ -136,7 +138,7 @@ commits `0bb23ae` et `243e539` de `webradio-app`) : après une pause imposée,
 toute reprise recharge le direct ; page cachée, la reprise automatique
 d'iOS est remise en pause et l'appui de l'auditeur recharge le direct.
 
-Reste avant de pouvoir annoncer la version 5 du contrat :
+Reste avant de pouvoir annoncer la version 8 du contrat :
 
 - **Recette du §9 sur un iPhone**, pour le reste : démarrage sans saut
   entre l'écran système et l'écran animé, podcast (la barre de progression
@@ -146,4 +148,5 @@ Reste avant de pouvoir annoncer la version 5 du contrat :
 - **Notifications (§8)** : mise en place Apple et Firebase ci-dessus, puis
   recette (§10) : demande d'autorisation une fois après l'accueil, message
   envoyé depuis l'administration reçu app fermée, en arrière-plan et au
-  premier plan, toucher qui ouvre la page choisie.
+  premier plan, toucher qui ouvre la page choisie ; radio en cours, le
+  toucher change de page sans couper le son.

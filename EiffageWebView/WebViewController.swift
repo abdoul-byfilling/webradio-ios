@@ -119,16 +119,30 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     }
     
     // MARK: - Notification
-    // Le site affiche la page sur place s'il le peut (window.tavOpenFromApp),
-    // sans recharger : la radio continue. Sinon (site pas encore chargé,
-    // écran saisonnier), chargement normal (contrat §8)
+    // App déjà ouverte : changement de page par la navigation du site,
+    // window.spa.navigateTo(page, queryString), sans recharger : la radio
+    // continue. Si window.spa n'existe pas (app qui démarre, écran
+    // saisonnier, « Pas de connexion »), chargement normal (contrat §8)
     private func openFromNotification(_ url: URL) {
-        guard let data = try? JSONSerialization.data(withJSONObject: [url.absoluteString]),
-              let argument = String(data: data, encoding: .utf8) else {
+        let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.percentEncodedQueryItems ?? []
+        let page = items.first { $0.name == "page" }?.value?.removingPercentEncoding ?? "home"
+        let queryString = items
+            .filter { $0.name != "page" && $0.name != "splash_shown" }
+            .map { item in item.value.map { "\(item.name)=\($0)" } ?? item.name }
+            .joined(separator: "&")
+        
+        guard let data = try? JSONSerialization.data(withJSONObject: [page, queryString]),
+              let arguments = String(data: data, encoding: .utf8) else {
             webView.load(URLRequest(url: url))
             return
         }
-        let script = "typeof window.tavOpenFromApp === 'function' && window.tavOpenFromApp(\(argument)[0]) === true"
+        let script = """
+        (function (args) {
+            if (!window.spa || typeof window.spa.navigateTo !== 'function') { return false; }
+            window.spa.navigateTo(args[0], args[1]);
+            return true;
+        })(\(arguments))
+        """
         webView.evaluateJavaScript(script) { [weak self] result, _ in
             if result as? Bool != true {
                 self?.webView.load(URLRequest(url: url))
