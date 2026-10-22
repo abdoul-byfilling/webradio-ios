@@ -124,6 +124,13 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     // continue. Si window.spa n'existe pas (app qui démarre, écran
     // saisonnier, « Pas de connexion »), chargement normal (contrat §8)
     private func openFromNotification(_ url: URL) {
+        // « Pas de connexion » affiché : la page derrière n'est pas utilisable,
+        // chargement normal (il se ferme dès que le site répond)
+        if presentedViewController is OfflineViewController {
+            webView.load(URLRequest(url: url))
+            return
+        }
+        
         let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.percentEncodedQueryItems ?? []
         let page = items.first { $0.name == "page" }?.value?.removingPercentEncoding ?? "home"
         let queryString = items
