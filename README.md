@@ -12,7 +12,7 @@ Webview (WKWebView) qui affiche le site de la radio
 - iOS minimum : 15
 - Version publiée : **2 (build 2)**, envoyée le 2025-07-07
 - Version dans ce code : **2.1 (build 3)**, pas encore publiée
-- Contrat respecté : **aucun pour l'instant**, objectif version 8
+- Contrat respecté : **version 10** (recette du 2026-10-22)
 
 ## Origine
 
@@ -116,7 +116,8 @@ sombre sans rechargement).
 
 ## Recette sur iPhone
 
-Faite le 2026-10-22 sur un iPhone 11, app lancée depuis Xcode :
+Lecture en arrière-plan, le 2026-10-22 sur un iPhone 11, app lancée depuis
+Xcode :
 
 - Radio en arrière-plan, écran verrouillé, bouton silencieux : OK.
 - Commandes de l'écran verrouillé (Media Session du site) : OK.
@@ -138,15 +139,11 @@ commits `0bb23ae` et `243e539` de `webradio-app`) : après une pause imposée,
 toute reprise recharge le direct ; page cachée, la reprise automatique
 d'iOS est remise en pause et l'appui de l'auditeur recharge le direct.
 
-Reste avant de pouvoir annoncer la version 8 du contrat :
-
-- **Recette du §9 sur un iPhone**, pour le reste : démarrage sans saut
-  entre l'écran système et l'écran animé, podcast (la barre de progression
-  avance), demande du micro et envoi d'une dédicace, `tel:` / `mailto:` /
-  WhatsApp et réseaux sociaux hors de l'app, geste retour, mode avion,
-  barre d'état en thème sombre.
-- **Notifications (§8)** : mise en place Apple et Firebase ci-dessus, puis
-  recette (§10) : demande d'autorisation une fois après l'accueil, message
-  envoyé depuis l'administration reçu app fermée, en arrière-plan et au
-  premier plan, toucher qui ouvre la page choisie ; radio en cours, le
-  toucher change de page sans couper le son.
+Recette complète du contrat (§10), le 2026-10-22, sur simulateur et sur un
+iPhone 16e (app lancée depuis Xcode) : démarrage sans saut, écran saisonnier
+une seule fois, barre d'état (dont thème sombre), onglet Plus sans boutons
+des stores, radio et podcast, dédicace vocale (après correction du site :
+l'enregistrement MP4 d'iOS était refusé, `2cb6dee` de `webradio-app`),
+liens hors de l'app, geste retour, mode avion, notifications (autorisation,
+réception app fermée, en arrière-plan et au premier plan, toucher qui
+change de page sans couper la radio) : OK.
