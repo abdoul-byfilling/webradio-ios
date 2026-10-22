@@ -8,6 +8,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // La radio continue écran verrouillé ou app en arrière-plan
         // (avec UIBackgroundModes = audio dans Info.plist, contrat §6)
         try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+        
+        // Notifications push (contrat §8)
+        PushNotifications.shared.start(application: application)
         return true
     }
 

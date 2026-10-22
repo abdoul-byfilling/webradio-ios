@@ -9,11 +9,12 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     @IBOutlet weak var progressView: UIProgressView!
     
     // Adresse chargée et partie du site qui reste dans l'app (contrat §1)
-    private let targetURL = "https://www.eiffageconcessionssenegal.sn/app3/index.php"
-    private let appPrefix = "https://www.eiffageconcessionssenegal.sn/app3/"
+    static let targetURL = "https://www.eiffageconcessionssenegal.sn/app3/index.php"
+    static let appPrefix = "https://www.eiffageconcessionssenegal.sn/app3/"
     private var connectivityManager = ConnectivityManager()
     private var progressObserver: NSKeyValueObservation?
     private var themeColorObserver: NSKeyValueObservation?
+    private var didAskForNotifications = false
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -23,6 +24,12 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         showLaunchCover()
         setupConnectivityMonitoring()
         loadWebsite()
+        
+        // Page demandée par une notification touchée (contrat §8) ; après
+        // l'accueil, pour qu'elle le remplace si l'app vient d'être lancée
+        PushNotifications.shared.onOpenURL = { [weak self] url in
+            self?.webView.load(URLRequest(url: url))
+        }
     }
     
     deinit {
@@ -102,7 +109,7 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     
     // MARK: - Web Loading
     private func loadWebsite() {
-        guard let url = URL(string: targetURL) else {
+        guard let url = URL(string: Self.targetURL) else {
             showError("URL invalide")
             return
         }
@@ -308,6 +315,13 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         updateProgress()
         hideLaunchCover()
+        
+        // Autorisation des notifications demandée après l'accueil, pas sur
+        // l'écran saisonnier (contrat §8)
+        if !didAskForNotifications && webView.url?.lastPathComponent == "index.php" {
+            didAskForNotifications = true
+            PushNotifications.shared.requestAuthorizationIfNeeded()
+        }
     }
 
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
@@ -338,7 +352,7 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     }
 
     private func isInApp(_ url: URL) -> Bool {
-        return url.absoluteString.hasPrefix(appPrefix)
+        return url.absoluteString.hasPrefix(Self.appPrefix)
     }
     
     // MARK: - WKUIDelegate

@@ -19,5 +19,9 @@ xcuserdata/
 *.provisionprofile
 AuthKey_*.p8
 
+# Notifications (contrat §8) : clé APNs et configuration Firebase, hors du dépôt
+*.p8
+GoogleService-Info.plist
+
 # Système
 .DS_Store

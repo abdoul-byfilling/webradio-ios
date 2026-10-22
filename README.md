@@ -12,7 +12,7 @@ Webview (WKWebView) qui affiche le site de la radio
 - iOS minimum : 15
 - Version publiée : **2 (build 2)**, envoyée le 2025-07-07
 - Version dans ce code : **2.1 (build 3)**, pas encore publiée
-- Contrat respecté : **aucun pour l'instant**, objectif version 4
+- Contrat respecté : **aucun pour l'instant**, objectif version 5
 
 ## Origine
 
@@ -38,6 +38,39 @@ Différences connues avec la 2.0, non reproduites faute de source :
 Sur le Mac : ouvrir `EiffageWebView.xcodeproj` dans Xcode, choisir l'équipe
 SENAC SA si Xcode la demande, lancer sur un iPhone. Pour publier :
 Product → Archive, puis Distribute App → App Store Connect.
+
+## Notifications push (contrat §8)
+
+Les messages se rédigent dans Administration > Notifications du site et
+partent par Firebase Cloud Messaging. L'app (`PushNotifications.swift`)
+demande l'autorisation une fois après l'accueil, inscrit son jeton à
+`api/push-register.php`, affiche la bannière même ouverte et, au toucher,
+charge `data.url` s'il est sous `/app3/` (sinon l'accueil).
+
+Hors du dépôt (`.gitignore`) : `GoogleService-Info.plist` et la clé APNs
+`*.p8`. Sans `GoogleService-Info.plist`, l'app compile et fonctionne, sans
+notifications (avertissement à la compilation). **Avant d'archiver une
+version pour l'App Store, vérifier qu'il est présent.**
+
+Mise en place (une fois) :
+
+1. **Clé APNs** : developer.apple.com → Certificates, Identifiers & Profiles
+   → Keys → « + », cocher Apple Push Notifications service (APNs),
+   télécharger le `.p8` (une seule fois possible), noter son Key ID. Le
+   ranger hors du dépôt.
+2. **Firebase** : dans le projet Firebase utilisé par le site (console
+   Firebase), ajouter une app iOS avec l'identifiant
+   `com.icreo.radiodelavenir`, télécharger `GoogleService-Info.plist` et le
+   poser dans `EiffageWebView/` (à côté d'`Info.plist`).
+3. **Firebase → Paramètres du projet → Cloud Messaging → Configuration de
+   l'app Apple** : déposer la clé `.p8` avec son Key ID et l'ID d'équipe
+   `39NW638GX5`.
+4. **Xcode** : la capacité Push Notifications est déclarée
+   (`EiffageWebView.entitlements`) ; la signature automatique l'active sur
+   l'identifiant au premier lancement sur iPhone.
+
+Les notifications s'essaient sur un vrai iPhone (le simulateur de ce Mac
+Intel ne reçoit pas de jeton APNs).
 
 ## Écarts avec le contrat
 
@@ -103,10 +136,14 @@ commits `0bb23ae` et `243e539` de `webradio-app`) : après une pause imposée,
 toute reprise recharge le direct ; page cachée, la reprise automatique
 d'iOS est remise en pause et l'appui de l'auditeur recharge le direct.
 
-Reste avant de pouvoir annoncer la version 4 du contrat :
+Reste avant de pouvoir annoncer la version 5 du contrat :
 
 - **Recette du §9 sur un iPhone**, pour le reste : démarrage sans saut
   entre l'écran système et l'écran animé, podcast (la barre de progression
   avance), demande du micro et envoi d'une dédicace, `tel:` / `mailto:` /
   WhatsApp et réseaux sociaux hors de l'app, geste retour, mode avion,
   barre d'état en thème sombre.
+- **Notifications (§8)** : mise en place Apple et Firebase ci-dessus, puis
+  recette (§10) : demande d'autorisation une fois après l'accueil, message
+  envoyé depuis l'administration reçu app fermée, en arrière-plan et au
+  premier plan, toucher qui ouvre la page choisie.
