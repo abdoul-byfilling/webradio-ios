@@ -75,9 +75,9 @@ Contrats versions 2 à 4 (2026-10-21), faits et vérifiés sur simulateur :
   de coins arrondis : Xcode refuse les attributs personnalisés dans un
   écran de lancement.
 
-Le site doit être déployé avant la publication de l'app : la version en
-ligne annonce encore `theme-color` `#1976D2` (barre d'état bleue au-dessus
-d'un en-tête gris clair).
+Site déployé le 2026-10-22 : parcours vérifié sur simulateur avec le site
+en ligne (écran saisonnier rose, accueil `#F2F5F8`, passage en thème
+sombre sans rechargement).
 
 Reste avant de pouvoir annoncer la version 4 du contrat :
 
