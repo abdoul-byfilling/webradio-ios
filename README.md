@@ -79,11 +79,34 @@ Site déployé le 2026-10-22 : parcours vérifié sur simulateur avec le site
 en ligne (écran saisonnier rose, accueil `#F2F5F8`, passage en thème
 sombre sans rechargement).
 
+## Recette sur iPhone
+
+Faite le 2026-10-22 sur un iPhone 11, app lancée depuis Xcode :
+
+- Radio en arrière-plan, écran verrouillé, bouton silencieux : OK.
+- Commandes de l'écran verrouillé (Media Session du site) : OK.
+- Appel entrant, écran déverrouillé (décroché ou non) : la radio se met en
+  pause puis reprend seule, sur le direct.
+- Appel refusé, écran verrouillé : la radio reste sur l'écran verrouillé,
+  ▶ la relance sur le direct.
+- **Limite connue**, appel décroché avec l'écran verrouillé : à la fin de
+  l'appel, iOS affiche la dernière app de musique (Apple Music) sur l'écran
+  verrouillé au lieu de la radio. Il faut ouvrir l'app et appuyer une fois
+  sur ▶. C'est WebKit qui déclare la lecture à iOS : ni le site ni l'app
+  n'y ont de prise directe. Piste non essayée : que l'app active elle-même
+  sa session audio pendant l'écoute pour recevoir les interruptions d'iOS
+  (jamais à l'ouverture de l'app, ce qui couperait la musique de
+  l'auditeur).
+
+La reprise après un appel est gérée par le site (`global-player.js`,
+commits `0bb23ae` et `243e539` de `webradio-app`) : après une pause imposée,
+toute reprise recharge le direct ; page cachée, la reprise automatique
+d'iOS est remise en pause et l'appui de l'auditeur recharge le direct.
+
 Reste avant de pouvoir annoncer la version 4 du contrat :
 
-- **Recette du §9 sur un iPhone**, en particulier : démarrage sans saut
-  entre l'écran système et l'écran animé, radio écran verrouillé et
-  commandes de l'écran verrouillé (Media Session du site), demande du
-  micro et envoi d'une dédicace, `tel:` / `mailto:` / WhatsApp, geste
-  retour, mode avion. Sur simulateur, la radio continue app en
-  arrière-plan.
+- **Recette du §9 sur un iPhone**, pour le reste : démarrage sans saut
+  entre l'écran système et l'écran animé, podcast (la barre de progression
+  avance), demande du micro et envoi d'une dédicace, `tel:` / `mailto:` /
+  WhatsApp et réseaux sociaux hors de l'app, geste retour, mode avion,
+  barre d'état en thème sombre.
