@@ -173,7 +173,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# GoogleService-Info.plist n'est pas versionné (contrat §8, voir README) :\n# copié dans l'app s'il est présent, sinon notifications désactivées\nSRC=\"${SRCROOT}/EiffageWebView/GoogleService-Info.plist\"\nDST=\"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist\"\nif [ -f \"$SRC\" ]; then\n  cp \"$SRC\" \"$DST\"\nelse\n  rm -f \"$DST\"\n  echo \"warning: GoogleService-Info.plist absent : notifications push désactivées dans cette app\"\nfi\n";
+			shellScript = "# GoogleService-Info.plist n'est pas versionné (contrat §8, voir README) :\n# copié dans l'app s'il est présent, sinon notifications désactivées.\n# Jamais sur simulateur : il ne reçoit pas de notifications et ses jetons\n# s'inscriraient dans la base de production du site.\nSRC=\"${SRCROOT}/EiffageWebView/GoogleService-Info.plist\"\nDST=\"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist\"\nif [ \"$PLATFORM_NAME\" = \"iphonesimulator\" ]; then\n  rm -f \"$DST\"\n  echo \"note: simulateur : GoogleService-Info.plist non copié, notifications désactivées\"\nelif [ -f \"$SRC\" ]; then\n  cp \"$SRC\" \"$DST\"\nelse\n  rm -f \"$DST\"\n  echo \"warning: GoogleService-Info.plist absent : notifications push désactivées dans cette app\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

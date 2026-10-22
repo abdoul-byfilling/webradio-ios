@@ -51,7 +51,9 @@ continue ; sinon par un chargement normal.
 
 Hors du dépôt (`.gitignore`) : `GoogleService-Info.plist` et la clé APNs
 `*.p8`. Sans `GoogleService-Info.plist`, l'app compile et fonctionne, sans
-notifications (avertissement à la compilation). **Avant d'archiver une
+notifications (avertissement à la compilation). Il n'est jamais copié dans les
+compilations pour simulateur : leurs jetons s'inscriraient dans la base de
+production du site. **Avant d'archiver une
 version pour l'App Store, vérifier qu'il est présent.**
 
 Mise en place (une fois) :
