@@ -53,7 +53,9 @@ class PushNotifications: NSObject {
 
     // MARK: - Registration
     // Inscription du jeton auprès du site ; refaite si le jeton ou la version
-    // de l'app change, et au lancement suivant en cas d'échec
+    // de l'app change, et au lancement suivant si le site n'a pas pu répondre
+    // (429, 5xx, pas de réseau). Un 400 (requête refusée) n'est pas retenté :
+    // la même requête serait refusée encore (contrat §8)
     private func register(token: String) {
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
         let registration = "\(token)|\(version)"
@@ -71,6 +73,9 @@ class PushNotifications: NSObject {
             let status = (response as? HTTPURLResponse)?.statusCode ?? 0
             if status == 200 {
                 UserDefaults.standard.set(registration, forKey: registeredKey)
+            } else if status == 400 {
+                UserDefaults.standard.set(registration, forKey: registeredKey)
+                print("Inscription aux notifications refusée par le site (HTTP 400) : pas de nouvel essai pour ce jeton")
             } else {
                 print("Inscription aux notifications échouée (HTTP \(status), \(error?.localizedDescription ?? "")) : nouvel essai au prochain lancement")
             }
