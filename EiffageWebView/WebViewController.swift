@@ -62,9 +62,14 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
 
         webView = WKWebView(frame: .zero, configuration: configuration)
         webView.translatesAutoresizingMaskIntoConstraints = false
+        // Pas de marge ajoutée par iOS sous la page (contrat §3, « Bas de l'écran ») :
+        // sinon la fin de page la dévoile et la barre du site se décolle d'environ
+        // 34 px. Le site reçoit viewport-fit=cover et se place lui-même au-dessus
+        // du trait d'accueil (env(safe-area-inset-bottom)).
+        webView.scrollView.contentInsetAdjustmentBehavior = .never
         view.addSubview(webView)
         // Sous la barre d'état, qui garde la couleur annoncée par le site
-        // (contrat §4) ; en bas, WebKit prolonge la page sous la barre d'accueil
+        // (contrat §4) ; en bas, la page descend sous la barre d'accueil
         NSLayoutConstraint.activate([
             webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
