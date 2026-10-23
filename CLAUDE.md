@@ -11,8 +11,8 @@ connexion).
 La règle commune est le contrat du dépôt du site, `webradio-app` :
 `docs/app-native.md` (cloner webradio-app à côté de ce projet, en lecture seule).
 
-- Version du contrat respectée par cette app : **10** (recette du
-  2026-10-22, voir README.md).
+- Version du contrat respectée par cette app : **12** (recette du
+  2026-10-22, voir README.md). Pistes pour la suite : AMELIORATIONS.md.
 - Lire le contrat avant toute modification touchant la webview, les liens,
   le User-Agent, les permissions, l'audio, les écrans de démarrage, la
   couleur de la barre d'état ou les notifications.

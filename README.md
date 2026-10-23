@@ -12,7 +12,9 @@ Webview (WKWebView) qui affiche le site de la radio
 - iOS minimum : 15
 - Version publiée : **2 (build 2)**, envoyée le 2025-07-07
 - Version dans ce code : **2.1 (build 3)**, pas encore publiée
-- Contrat respecté : **version 10** (recette du 2026-10-22)
+- Contrat respecté : **version 12** (recette du 2026-10-22 ; v11 et v12 sans
+  changement de code iOS)
+- Pistes d'amélioration : voir [AMELIORATIONS.md](AMELIORATIONS.md)
 
 ## Origine
 
